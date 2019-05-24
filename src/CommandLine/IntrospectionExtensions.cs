@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 namespace CommandLine
 {
 #if NET40
- 
-	internal static class IntrospectionExtensions
-	{
-		public static Type GetTypeInfo(this Type type)
-		{
-			return type;
-		}
-	}
+    internal static class IntrospectionExtensions
+    {
+        public static Type GetTypeInfo(this Type type) => type;
+    }
 #endif
 }
-

@@ -20,8 +20,7 @@ namespace CommandLine
         {
             return errors
                 .Where(e => !e.StopsProcessing)
-                .Where(e => !(e.Tag == ErrorType.UnknownOptionError
-                    && ((UnknownOptionError)e).Token.EqualsOrdinalIgnoreCase("help")));
+                .Where(e => !(e.Tag == ErrorType.UnknownOptionError && ((UnknownOptionError)e).Token.EqualsOrdinalIgnoreCase("help")));
         }
     }
 }

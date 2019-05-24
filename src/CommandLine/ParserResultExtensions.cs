@@ -20,11 +20,7 @@ namespace CommandLine
         /// <returns>The same <paramref name="result"/> instance.</returns>
         public static ParserResult<T> WithParsed<T>(this ParserResult<T> result, Action<T> action)
         {
-            var parsed = result as Parsed<T>;
-            if (parsed != null)
-            {
-                action(parsed.Value);
-            }
+            if (result is Parsed<T> parsed) action(parsed.Value);
             return result;
         }
 
@@ -37,14 +33,7 @@ namespace CommandLine
         /// <returns>The same <paramref name="result"/> instance.</returns>
         public static ParserResult<object> WithParsed<T>(this ParserResult<object> result, Action<T> action)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
-            {
-                if (parsed.Value is T)
-                {
-                    action((T)parsed.Value);
-                }
-            }
+            if (result is Parsed<object> parsed && parsed.Value is T) action((T)parsed.Value);
             return result;
         }
 
@@ -58,11 +47,7 @@ namespace CommandLine
         /// <returns>The same <paramref name="result"/> instance.</returns>
         public static ParserResult<T> WithNotParsed<T>(this ParserResult<T> result, Action<IEnumerable<Error>> action)
         {
-            var notParsed = result as NotParsed<T>;
-            if (notParsed != null)
-            {
-                action(notParsed.Errors);
-            }
+            if (result is NotParsed<T> notParsed) action(notParsed.Errors);
             return result;
         }
 
@@ -76,16 +61,10 @@ namespace CommandLine
         /// <param name="notParsedFunc">Lambda executed on failed parsing.</param>
         /// <returns>The new value.</returns>
         public static TResult MapResult<TSource, TResult>(this ParserResult<TSource> result,
-            Func<TSource, TResult> parsedFunc,
-            Func<IEnumerable<Error>, TResult> notParsedFunc)
-        {
-            var parsed = result as Parsed<TSource>;
-            if (parsed != null)
-            {
-                return parsedFunc(parsed.Value);
-            }
-            return notParsedFunc(((NotParsed<TSource>)result).Errors);
-        }
+                                                          Func<TSource, TResult> parsedFunc,
+                                                          Func<IEnumerable<Error>, TResult> notParsedFunc)
+
+            => result is Parsed<TSource> parsed ? parsedFunc(parsed.Value) : notParsedFunc(((NotParsed<TSource>)result).Errors);
 
         /// <summary>
         /// Provides a way to transform result data into another value.
@@ -100,13 +79,9 @@ namespace CommandLine
             Func<T1, TResult> parsedFunc1,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -128,17 +103,10 @@ namespace CommandLine
             Func<T2, TResult> parsedFunc2,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -163,21 +131,11 @@ namespace CommandLine
             Func<T3, TResult> parsedFunc3,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -205,25 +163,12 @@ namespace CommandLine
             Func<T4, TResult> parsedFunc4,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -254,29 +199,13 @@ namespace CommandLine
             Func<T5, TResult> parsedFunc5,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -310,33 +239,14 @@ namespace CommandLine
             Func<T6, TResult> parsedFunc6,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -373,37 +283,15 @@ namespace CommandLine
             Func<T7, TResult> parsedFunc7,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -443,41 +331,16 @@ namespace CommandLine
             Func<T8, TResult> parsedFunc8,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -520,45 +383,17 @@ namespace CommandLine
             Func<T9, TResult> parsedFunc9,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -604,49 +439,18 @@ namespace CommandLine
             Func<T10, TResult> parsedFunc10,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -695,53 +499,19 @@ namespace CommandLine
             Func<T11, TResult> parsedFunc11,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -793,57 +563,20 @@ namespace CommandLine
             Func<T12, TResult> parsedFunc12,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
-                if (parsed.Value is T12)
-                {
-                    return parsedFunc12((T12)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
+                if (parsed.Value is T12) return parsedFunc12((T12)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -898,61 +631,21 @@ namespace CommandLine
             Func<T13, TResult> parsedFunc13,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
-                if (parsed.Value is T12)
-                {
-                    return parsedFunc12((T12)parsed.Value);
-                }
-                if (parsed.Value is T13)
-                {
-                    return parsedFunc13((T13)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
+                if (parsed.Value is T12) return parsedFunc12((T12)parsed.Value);
+                if (parsed.Value is T13) return parsedFunc13((T13)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -1010,65 +703,22 @@ namespace CommandLine
             Func<T14, TResult> parsedFunc14,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
-                if (parsed.Value is T12)
-                {
-                    return parsedFunc12((T12)parsed.Value);
-                }
-                if (parsed.Value is T13)
-                {
-                    return parsedFunc13((T13)parsed.Value);
-                }
-                if (parsed.Value is T14)
-                {
-                    return parsedFunc14((T14)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
+                if (parsed.Value is T12) return parsedFunc12((T12)parsed.Value);
+                if (parsed.Value is T13) return parsedFunc13((T13)parsed.Value);
+                if (parsed.Value is T14) return parsedFunc14((T14)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -1129,69 +779,23 @@ namespace CommandLine
             Func<T15, TResult> parsedFunc15,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
-                if (parsed.Value is T12)
-                {
-                    return parsedFunc12((T12)parsed.Value);
-                }
-                if (parsed.Value is T13)
-                {
-                    return parsedFunc13((T13)parsed.Value);
-                }
-                if (parsed.Value is T14)
-                {
-                    return parsedFunc14((T14)parsed.Value);
-                }
-                if (parsed.Value is T15)
-                {
-                    return parsedFunc15((T15)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
+                if (parsed.Value is T12) return parsedFunc12((T12)parsed.Value);
+                if (parsed.Value is T13) return parsedFunc13((T13)parsed.Value);
+                if (parsed.Value is T14) return parsedFunc14((T14)parsed.Value);
+                if (parsed.Value is T15) return parsedFunc15((T15)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);
@@ -1255,73 +859,24 @@ namespace CommandLine
             Func<T16, TResult> parsedFunc16,
             Func<IEnumerable<Error>, TResult> notParsedFunc)
         {
-            var parsed = result as Parsed<object>;
-            if (parsed != null)
+            if (result is Parsed<object> parsed)
             {
-                if (parsed.Value is T1)
-                {
-                    return parsedFunc1((T1)parsed.Value);
-                }
-                if (parsed.Value is T2)
-                {
-                    return parsedFunc2((T2)parsed.Value);
-                }
-                if (parsed.Value is T3)
-                {
-                    return parsedFunc3((T3)parsed.Value);
-                }
-                if (parsed.Value is T4)
-                {
-                    return parsedFunc4((T4)parsed.Value);
-                }
-                if (parsed.Value is T5)
-                {
-                    return parsedFunc5((T5)parsed.Value);
-                }
-                if (parsed.Value is T6)
-                {
-                    return parsedFunc6((T6)parsed.Value);
-                }
-                if (parsed.Value is T7)
-                {
-                    return parsedFunc7((T7)parsed.Value);
-                }
-                if (parsed.Value is T8)
-                {
-                    return parsedFunc8((T8)parsed.Value);
-                }
-                if (parsed.Value is T9)
-                {
-                    return parsedFunc9((T9)parsed.Value);
-                }
-                if (parsed.Value is T10)
-                {
-                    return parsedFunc10((T10)parsed.Value);
-                }
-                if (parsed.Value is T11)
-                {
-                    return parsedFunc11((T11)parsed.Value);
-                }
-                if (parsed.Value is T12)
-                {
-                    return parsedFunc12((T12)parsed.Value);
-                }
-                if (parsed.Value is T13)
-                {
-                    return parsedFunc13((T13)parsed.Value);
-                }
-                if (parsed.Value is T14)
-                {
-                    return parsedFunc14((T14)parsed.Value);
-                }
-                if (parsed.Value is T15)
-                {
-                    return parsedFunc15((T15)parsed.Value);
-                }
-                if (parsed.Value is T16)
-                {
-                    return parsedFunc16((T16)parsed.Value);
-                }
+                if (parsed.Value is T1) return parsedFunc1((T1)parsed.Value);
+                if (parsed.Value is T2) return parsedFunc2((T2)parsed.Value);
+                if (parsed.Value is T3) return parsedFunc3((T3)parsed.Value);
+                if (parsed.Value is T4) return parsedFunc4((T4)parsed.Value);
+                if (parsed.Value is T5) return parsedFunc5((T5)parsed.Value);
+                if (parsed.Value is T6) return parsedFunc6((T6)parsed.Value);
+                if (parsed.Value is T7) return parsedFunc7((T7)parsed.Value);
+                if (parsed.Value is T8) return parsedFunc8((T8)parsed.Value);
+                if (parsed.Value is T9) return parsedFunc9((T9)parsed.Value);
+                if (parsed.Value is T10) return parsedFunc10((T10)parsed.Value);
+                if (parsed.Value is T11) return parsedFunc11((T11)parsed.Value);
+                if (parsed.Value is T12) return parsedFunc12((T12)parsed.Value);
+                if (parsed.Value is T13) return parsedFunc13((T13)parsed.Value);
+                if (parsed.Value is T14) return parsedFunc14((T14)parsed.Value);
+                if (parsed.Value is T15) return parsedFunc15((T15)parsed.Value);
+                if (parsed.Value is T16) return parsedFunc16((T16)parsed.Value);
                 throw new InvalidOperationException();
             }
             return notParsedFunc(((NotParsed<object>)result).Errors);

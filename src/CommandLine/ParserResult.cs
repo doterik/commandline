@@ -9,7 +9,7 @@ namespace CommandLine
     public sealed class TypeInfo
     {
         private readonly Type current;
-        private readonly IEnumerable<Type> choices; 
+        private readonly IEnumerable<Type> choices;
 
         private TypeInfo(Type current, IEnumerable<Type> choices)
         {
@@ -17,25 +17,13 @@ namespace CommandLine
             this.choices = choices;
         }
 
-        public Type Current
-        {
-            get { return this.current; }
-        }
+        public Type Current => current;
 
-        public IEnumerable<Type> Choices
-        {
-            get { return this.choices; }
-        }
+        public IEnumerable<Type> Choices => choices;
 
-        internal static TypeInfo Create(Type current)
-        {
-            return new TypeInfo(current, Enumerable.Empty<Type>());
-        }
+        internal static TypeInfo Create(Type current) => new TypeInfo(current, Enumerable.Empty<Type>());
 
-        internal static TypeInfo Create(Type current, IEnumerable<Type> choices)
-        {
-            return new TypeInfo(current, choices);
-        }
+        internal static TypeInfo Create(Type current, IEnumerable<Type> choices) => new TypeInfo(current, choices);
     }
 
     /// <summary>
@@ -73,15 +61,9 @@ namespace CommandLine
         /// <summary>
         /// Parser result type discriminator, defined as <see cref="CommandLine.ParserResultType"/> enumeration.
         /// </summary>
-        public ParserResultType Tag
-        {
-            get { return this.tag; }
-        }
+        public ParserResultType Tag => tag;
 
-        public TypeInfo TypeInfo
-        {
-            get { return typeInfo; }
-        }
+        public TypeInfo TypeInfo => typeInfo;
     }
 
     /// <summary>
@@ -92,65 +74,34 @@ namespace CommandLine
     {
         private readonly T value;
 
-        internal Parsed(T value, TypeInfo typeInfo)
-            : base(ParserResultType.Parsed, typeInfo)
-        {
-            this.value = value;
-        }
+        internal Parsed(T value, TypeInfo typeInfo) : base(ParserResultType.Parsed, typeInfo) => this.value = value;
 
-        internal Parsed(T value)
-            : this(value, TypeInfo.Create(value.GetType()))
-        {
-        }
+        internal Parsed(T value) : this(value, TypeInfo.Create(value.GetType())) { }
 
         /// <summary>
         /// Gets the instance with parsed values.
         /// </summary>
-        public T Value
-        {
-            get { return value; }
-        }
+        public T Value => value;
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>.
         /// </summary>
         /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="System.Object"/>.</param>
         /// <returns><value>true</value> if the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>; otherwise, <value>false</value>.</returns>
-        public override bool Equals(object obj)
-        {
-            var other = obj as Parsed<T>;
-            if (other != null)
-            {
-                return Equals(other);
-            }
-
-            return base.Equals(obj);
-        }
+        public override bool Equals(object obj) => obj is Parsed<T> other ? Equals(other) : base.Equals(obj);
 
         /// <summary>
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <remarks>A hash code for the current <see cref="System.Object"/>.</remarks>
-        public override int GetHashCode()
-        {
-            return new { Tag, Value }.GetHashCode();
-        }
+        public override int GetHashCode() => new { Tag, Value }.GetHashCode();
 
         /// <summary>
         /// Returns a value that indicates whether the current instance and a specified <see cref="CommandLine.Parsed{T}"/> have the same value.
         /// </summary>
         /// <param name="other">The <see cref="CommandLine.Parsed{T}"/> instance to compare.</param>
         /// <returns><value>true</value> if this instance of <see cref="CommandLine.Parsed{T}"/> and <paramref name="other"/> have the same value; otherwise, <value>false</value>.</returns>
-        public bool Equals(Parsed<T> other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return this.Tag.Equals(other.Tag)
-                && Value.Equals(other.Value);
-        }
+        public bool Equals(Parsed<T> other) => other == null ? false : Tag.Equals(other.Tag) && Value.Equals(other.Value);
     }
 
     /// <summary>
@@ -161,59 +112,31 @@ namespace CommandLine
     {
         private readonly IEnumerable<Error> errors;
 
-        internal NotParsed(TypeInfo typeInfo, IEnumerable<Error> errors)
-            : base(ParserResultType.NotParsed, typeInfo)
-        {
-            this.errors = errors;
-        }
+        internal NotParsed(TypeInfo typeInfo, IEnumerable<Error> errors) : base(ParserResultType.NotParsed, typeInfo) => this.errors = errors;
 
         /// <summary>
         /// Gets the sequence of parsing errors.
         /// </summary>
-        public IEnumerable<Error> Errors
-        {
-            get { return errors; }
-        }
+        public IEnumerable<Error> Errors => errors;
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>.
         /// </summary>
         /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="System.Object"/>.</param>
         /// <returns><value>true</value> if the specified <see cref="System.Object"/> is equal to the current <see cref="System.Object"/>; otherwise, <value>false</value>.</returns>
-        public override bool Equals(object obj)
-        {
-            var other = obj as NotParsed<T>;
-            if (other != null)
-            {
-                return Equals(other);
-            }
-
-            return base.Equals(obj);
-        }
+        public override bool Equals(object obj) => obj is NotParsed<T> other ? Equals(other) : base.Equals(obj);
 
         /// <summary>
         /// Serves as a hash function for a particular type.
         /// </summary>
         /// <remarks>A hash code for the current <see cref="System.Object"/>.</remarks>
-        public override int GetHashCode()
-        {
-            return new { Tag, Errors }.GetHashCode();
-        }
+        public override int GetHashCode() => new { Tag, Errors }.GetHashCode();
 
         /// <summary>
         /// Returns a value that indicates whether the current instance and a specified <see cref="CommandLine.NotParsed{T}"/> have the same value.
         /// </summary>
         /// <param name="other">The <see cref="CommandLine.NotParsed{T}"/> instance to compare.</param>
         /// <returns><value>true</value> if this instance of <see cref="CommandLine.NotParsed{T}"/> and <paramref name="other"/> have the same value; otherwise, <value>false</value>.</returns>
-        public bool Equals(NotParsed<T> other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return this.Tag.Equals(other.Tag)
-                && Errors.SequenceEqual(other.Errors);
-        }
+        public bool Equals(NotParsed<T> other) => other == null ? false : Tag.Equals(other.Tag) && Errors.SequenceEqual(other.Errors);
     }
 }

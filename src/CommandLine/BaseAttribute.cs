@@ -29,11 +29,7 @@ namespace CommandLine
         /// <summary>
         /// Gets or sets a value indicating whether a command line option is required.
         /// </summary>
-        public bool Required
-        {
-            get;
-            set;
-        }
+        public bool Required { get; set; }
 
         /// <summary>
         /// When applied to <see cref="System.Collections.Generic.IEnumerable{T}"/> properties defines
@@ -42,16 +38,8 @@ namespace CommandLine
         /// <remarks>If not set, no lower range is enforced.</remarks>
         public int Min
         {
-            get { return min; }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                min = value;
-            }
+            get => min;
+            set => min = (value >= 0) ? value : throw new ArgumentNullException("value");
         }
 
         /// <summary>
@@ -61,16 +49,8 @@ namespace CommandLine
         /// <remarks>If not set, no upper range is enforced.</remarks>
         public int Max
         {
-            get { return max; }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                max = value;
-            }
+            get => max;
+            set => max = (value >= 0) ? value : throw new ArgumentNullException("value");
         }
 
         /// <summary>
@@ -78,11 +58,8 @@ namespace CommandLine
         /// </summary>
         public object Default
         {
-            get { return @default; }
-            set
-            {
-                @default = value;
-            }
+            get => @default;
+            set => @default = value;
         }
 
         /// <summary>
@@ -90,11 +67,8 @@ namespace CommandLine
         /// </summary>
         public string HelpText
         {
-            get { return helpText; }
-            set
-            {
-                helpText = value ?? throw new ArgumentNullException("value");
-            }
+            get => helpText;
+            set => helpText = value ?? throw new ArgumentNullException("value");
         }
 
         /// <summary>
@@ -102,20 +76,13 @@ namespace CommandLine
         /// </summary>
         public string MetaValue
         {
-            get { return metaValue; }
-            set
-            {
-                metaValue = value ?? throw new ArgumentNullException("value");
-            }
+            get => metaValue;
+            set => metaValue = value ?? throw new ArgumentNullException("value");
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether a command line option is visible in the help text.
         /// </summary>
-        public bool Hidden
-        {
-            get;
-            set;
-        }
+        public bool Hidden { get; set; }
     }
 }

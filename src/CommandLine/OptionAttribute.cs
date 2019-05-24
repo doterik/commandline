@@ -18,11 +18,8 @@ namespace CommandLine
 
         private OptionAttribute(string shortName, string longName) : base()
         {
-            if (shortName == null) throw new ArgumentNullException("shortName");
-            if (longName == null) throw new ArgumentNullException("longName");
-
-            this.shortName = shortName;
-            this.longName = longName;
+            this.shortName = shortName ?? throw new ArgumentNullException("shortName");
+            this.longName = longName ?? throw new ArgumentNullException("longName");
             setName = string.Empty;
             separator = '\0';
         }
@@ -31,67 +28,44 @@ namespace CommandLine
         /// Initializes a new instance of the <see cref="CommandLine.OptionAttribute"/> class.
         /// The default long name will be inferred from target property.
         /// </summary>
-        public OptionAttribute()
-            : this(string.Empty, string.Empty)
-        {
-        }
+        public OptionAttribute() : this(string.Empty, string.Empty) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandLine.OptionAttribute"/> class.
+        /// </summary>
+        /// <param name="shortName">The short name of the option..</param>
+        public OptionAttribute(char shortName) : this(shortName.ToOneCharString(), string.Empty) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLine.OptionAttribute"/> class.
         /// </summary>
         /// <param name="longName">The long name of the option.</param>
-        public OptionAttribute(string longName)
-            : this(string.Empty, longName)
-        {
-        }
+        public OptionAttribute(string longName) : this(string.Empty, longName) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandLine.OptionAttribute"/> class.
         /// </summary>
         /// <param name="shortName">The short name of the option.</param>
         /// <param name="longName">The long name of the option or null if not used.</param>
-        public OptionAttribute(char shortName, string longName)
-            : this(shortName.ToOneCharString(), longName)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CommandLine.OptionAttribute"/> class.
-        /// </summary>
-        /// <param name="shortName">The short name of the option..</param>
-        public OptionAttribute(char shortName)
-            : this(shortName.ToOneCharString(), string.Empty)
-        {
-        }
-
-        /// <summary>
-        /// Gets long name of this command line option. This name is usually a single english word.
-        /// </summary>
-        public string LongName
-        {
-            get { return longName; }
-        }
+        public OptionAttribute(char shortName, string longName) : this(shortName.ToOneCharString(), longName) { }
 
         /// <summary>
         /// Gets a short name of this command line option, made of one character.
         /// </summary>
-        public string ShortName
-        {
-            get { return shortName; }
-        }
+        public string ShortName => shortName;
+
+        /// <summary>
+        /// Gets long name of this command line option. This name is usually a single english word.
+        /// </summary>
+        public string LongName => longName;
 
         /// <summary>
         /// Gets or sets the option's mutually exclusive set name.
         /// </summary>
         public string SetName
         {
-            get { return setName; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException("value");
-
-                setName = value;
-            }
+            get => setName;
+            set => setName = value ?? throw new ArgumentNullException("value");
         }
 
         /// <summary>
@@ -100,8 +74,8 @@ namespace CommandLine
         /// </summary>
         public char Separator
         {
-            get { return separator ; }
-            set { separator = value; }
+            get => separator;
+            set => separator = value;
         }
     }
 }

@@ -39,15 +39,9 @@ namespace CommandLine
             try
             {
                 maximumDisplayWidth = Console.WindowWidth;
-                if (maximumDisplayWidth < 1)
-                {
-                    maximumDisplayWidth = DefaultMaximumLength;
-                }
+                if (maximumDisplayWidth < 1) maximumDisplayWidth = DefaultMaximumLength;
             }
-            catch (IOException)
-            {
-                maximumDisplayWidth = DefaultMaximumLength;
-            }
+            catch (IOException) { maximumDisplayWidth = DefaultMaximumLength; }
         }
 
         /// <summary>
@@ -65,8 +59,8 @@ namespace CommandLine
         /// </summary>
         public bool CaseSensitive
         {
-            get { return caseSensitive; }
-            set { PopsicleSetter.Set(Consumed, ref caseSensitive, value); }
+            get => caseSensitive;
+            set => PopsicleSetter.Set(Consumed, ref caseSensitive, value);
         }
 
         /// <summary>
@@ -75,8 +69,8 @@ namespace CommandLine
         /// </summary>
         public bool CaseInsensitiveEnumValues
         {
-            get { return caseInsensitiveEnumValues; }
-            set { PopsicleSetter.Set(Consumed, ref caseInsensitiveEnumValues, value); }
+            get => caseInsensitiveEnumValues;
+            set => PopsicleSetter.Set(Consumed, ref caseInsensitiveEnumValues, value);
         }
 
         /// <summary>
@@ -87,12 +81,11 @@ namespace CommandLine
         /// </remarks>
         public CultureInfo ParsingCulture
         {
-            get { return parsingCulture; }
+            get => parsingCulture;
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-
-                PopsicleSetter.Set(Consumed, ref parsingCulture, value); 
+                PopsicleSetter.Set(Consumed, ref parsingCulture, value);
             }
         }
 
@@ -105,8 +98,8 @@ namespace CommandLine
         /// </remarks>
         public TextWriter HelpWriter
         {
-            get { return helpWriter; }
-            set { PopsicleSetter.Set(Consumed, ref helpWriter, value); }
+            get => helpWriter;
+            set => PopsicleSetter.Set(Consumed, ref helpWriter, value);
         }
 
         /// <summary>
@@ -122,8 +115,8 @@ namespace CommandLine
         /// </remarks>
         public bool IgnoreUnknownArguments
         {
-            get { return ignoreUnknownArguments; }
-            set { PopsicleSetter.Set(Consumed, ref ignoreUnknownArguments, value); }
+            get => ignoreUnknownArguments;
+            set => PopsicleSetter.Set(Consumed, ref ignoreUnknownArguments, value);
         }
 
         /// <summary>
@@ -131,8 +124,8 @@ namespace CommandLine
         /// </summary>
         public bool AutoHelp
         {
-            get { return autoHelp; }
-            set { PopsicleSetter.Set(Consumed, ref autoHelp, value); }
+            get => autoHelp;
+            set => PopsicleSetter.Set(Consumed, ref autoHelp, value);
         }
 
         /// <summary>
@@ -140,8 +133,8 @@ namespace CommandLine
         /// </summary>
         public bool AutoVersion
         {
-            get { return autoVersion; }
-            set { PopsicleSetter.Set(Consumed, ref autoVersion, value); }
+            get => autoVersion;
+            set => PopsicleSetter.Set(Consumed, ref autoVersion, value);
         }
 
         /// <summary>
@@ -150,8 +143,8 @@ namespace CommandLine
         /// </summary>
         public bool EnableDashDash
         {
-            get { return enableDashDash; }
-            set { PopsicleSetter.Set(Consumed, ref enableDashDash, value); }
+            get => enableDashDash;
+            set => PopsicleSetter.Set(Consumed, ref enableDashDash, value);
         }
 
         /// <summary>
@@ -159,19 +152,14 @@ namespace CommandLine
         /// </summary>
         public int MaximumDisplayWidth
         {
-            get { return maximumDisplayWidth; }
-            set { maximumDisplayWidth = value; }
+            get => maximumDisplayWidth;
+            set => maximumDisplayWidth = value;
         }
 
         internal StringComparer NameComparer
-        {
-            get
-            {
-                return CaseSensitive
+            => CaseSensitive
                     ? StringComparer.Ordinal
                     : StringComparer.OrdinalIgnoreCase;
-            }
-        }
 
         internal bool Consumed { get; set; }
 
@@ -181,21 +169,16 @@ namespace CommandLine
         public void Dispose()
         {
             Dispose(true);
-
             GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
         {
-            if (disposed)
-            {
-                return;
-            }
+            if (disposed) return;
 
             if (disposing)
             {
                 // Do not dispose HelpWriter. It is the caller's responsibility.
-
                 disposed = true;
             }
         }
